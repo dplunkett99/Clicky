@@ -45,6 +45,9 @@ class PlayScreenViewController: UIViewController {
         lowerBound = Int(screenSize.maxY)
         
         
+        scores.append(5)
+        
+        
     }
     
     

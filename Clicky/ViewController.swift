@@ -8,12 +8,14 @@
 
 import UIKit
 
+var scores:[Int] = []
+
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     //outlet variables
     @IBOutlet weak var tableView: UITableView!
     
-    var scores:[Int] = []
+    //var scores:[Int] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,8 +40,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         cell.textLabel?.text = String(scores[indexPath.row])
         return cell
     }
-
-
+    
+    
+   
 
 }
 

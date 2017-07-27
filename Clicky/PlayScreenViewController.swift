@@ -46,6 +46,9 @@ class PlayScreenViewController: UIViewController {
         lowerBound = Int(screenSize.maxY)
         
         
+        scores.append(5)
+        
+        
     }
     @IBAction func screenTapped(_ sender: UITapGestureRecognizer) {
         let point = sender.location(in: view)

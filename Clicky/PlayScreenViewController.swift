@@ -10,13 +10,18 @@ import UIKit
 
 class PlayScreenViewController: UIViewController {
 
+    // outlet declaration
     @IBOutlet weak var clickyButton: UIButton!
     
+    // implementation variables
+    var successfulPresses = 0
+    var buttonLocation = CGRect(x: 100, y: 100, width: 100, height: 100)
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        clickyButton.frame = buttonLocation
     }
     
     

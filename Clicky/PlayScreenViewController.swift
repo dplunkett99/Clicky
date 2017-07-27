@@ -15,17 +15,40 @@ class PlayScreenViewController: UIViewController {
     
     // implementation variables
     var successfulPresses = 0
+    let buttonWidth = 100
+    let buttonHeight = 100
     var buttonLocation = CGRect(x: 100, y: 100, width: 100, height: 100)
+    var playTimer = Timer()
+    var leftBound = 0.0
+    var rightBound = 0.0
+    var topBound = 0.0
+    var lowerBound = 0.0
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         clickyButton.frame = buttonLocation
+        
+        // set screenbounds
+        let screenSize = self.view.bounds
+        leftBound = Double(screenSize.minX)
+        rightBound = Double(screenSize.maxX)
+        topBound = Double(screenSize.minY)
+        lowerBound = Double(screenSize.maxY)
+        
+        
     }
     
     
     @IBAction func clickyButton(_ sender: UIButton) {
+        
+        playTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateButtonLocation), userInfo: nil, repeats: true)
+        
+    }
+    
+    func updateButtonLocation() {
         
     }
 

@@ -12,6 +12,7 @@ class PlayScreenViewController: UIViewController {
 
     // outlet declaration
     @IBOutlet weak var clickyButton: UIButton!
+    @IBOutlet weak var timeLabel: UILabel!
     
     // implementation variables
     var successfulPresses = 0

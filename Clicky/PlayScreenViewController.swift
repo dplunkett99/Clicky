@@ -13,9 +13,10 @@ class PlayScreenViewController: UIViewController {
     // outlet declaration
     @IBOutlet weak var clickyButton: UIButton!
     @IBOutlet weak var timeLabel: UILabel!
+    @IBOutlet weak var correctTapsLabel: UILabel!
     
     // implementation variables
-    var successfulPresses = 0
+    var correctTaps = 0
     let buttonWidth = 50
     let buttonHeight = 50
     var buttonLocation = CGRect(x: 100, y: 100, width: 100, height: 100)
@@ -24,9 +25,8 @@ class PlayScreenViewController: UIViewController {
     var rightBound = 0
     var topBound = 0
     var lowerBound = 0
-    let timeLimit = 10 //in secs
-    var timeLeft = 10
-    
+    let timeLimit = 20 //in secs
+    var timeLeft = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,6 +36,7 @@ class PlayScreenViewController: UIViewController {
         clickyButton.frame = buttonLocation
         timeLeft = timeLimit
         timeLabel.text = "TimeLeft: " + String(timeLeft)
+        correctTapsLabel.text = String(correctTaps)
         
         // set screenbounds
         let screenSize = self.view.bounds
@@ -46,18 +47,29 @@ class PlayScreenViewController: UIViewController {
         
         
     }
+    @IBAction func screenTapped(_ sender: UITapGestureRecognizer) {
+        let point = sender.location(in: view)
+        if clickyButton.frame.contains(point) {
+            correctTaps += 1
+            correctTapsLabel.text = String(correctTaps)
+            print("Button Hit!!")
+        }
+        else {
+            print("Missed")
+        }
+        
+    }
     
     
     @IBAction func clickyButton(_ sender: UIButton) {
         
-        playTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(updateButtonLocation), userInfo: nil, repeats: true)
-        
-        // update timer label
-        timeLabel.text = "TimeLeft: " + String(timeLeft)
-
+        playTimer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(updateButtonLocation), userInfo: nil, repeats: true)
     }
     
     func updateButtonLocation() {
+        
+        // update timer label
+        timeLabel.text = "TimeLeft: " + String(timeLeft)
         
         // update location of button
         let tmpX = arc4random_uniform(UInt32(rightBound - buttonWidth))
@@ -67,10 +79,10 @@ class PlayScreenViewController: UIViewController {
         // make button visible or invisible 
         if timeLeft % 2 == 0 {
             clickyButton.backgroundColor = self.view.backgroundColor
-            clickyButton.isEnabled = false
+            //clickyButton.isEnabled = false
         }
         else {
-            clickyButton.isEnabled = true
+            //clickyButton.isEnabled = true
             clickyButton.backgroundColor = UIColor.red
         }
         
@@ -79,6 +91,7 @@ class PlayScreenViewController: UIViewController {
         if timeLeft == 0 {
             playTimer.invalidate()
             timeLeft = timeLimit
+            correctTaps = 0
         }
     }
 

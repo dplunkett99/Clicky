@@ -11,29 +11,32 @@ import UIKit
 class PlayScreenViewController: UIViewController {
 
     // outlet declaration
-    @IBOutlet weak var clickyButton: UIButton!
+    @IBOutlet weak var startButton: UIButton!
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var correctTapsLabel: UILabel!
+    @IBOutlet weak var movingBlock: UIImageView!
     
     // implementation variables
     var correctTaps = 0
-    let buttonWidth = 50
-    let buttonHeight = 50
-    var buttonLocation = CGRect(x: 100, y: 100, width: 100, height: 100)
+    let blockWidth = 50
+    let blockHeight = 50
+    var blockLocation = CGRect(x: 100, y: 100, width: 100, height: 100)
     var playTimer = Timer()
     var leftBound = 0
     var rightBound = 0
     var topBound = 0
     var lowerBound = 0
-    let timeLimit = 20 //in secs
-    var timeLeft = 0
+    let timeLimit = 20.0 //in secs
+    var timeLeft = 0.0
+    let timeRes = 0.5
+    var nIterations = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        buttonLocation = CGRect(x: 0, y: 250, width: buttonWidth, height: buttonHeight)
-        clickyButton.frame = buttonLocation
+        blockLocation = CGRect(x: 0, y: 250, width: blockWidth, height: blockHeight)
+        movingBlock.frame = blockLocation
         timeLeft = timeLimit
         timeLabel.text = "TimeLeft: " + String(timeLeft)
         correctTapsLabel.text = String(correctTaps)
@@ -50,11 +53,12 @@ class PlayScreenViewController: UIViewController {
         
         
     }
+    
     @IBAction func screenTapped(_ sender: UITapGestureRecognizer) {
         let point = sender.location(in: view)
-        if clickyButton.frame.contains(point) {
+        if movingBlock.frame.contains(point) {
             correctTaps += 1
-            correctTapsLabel.text = String(correctTaps)
+            correctTapsLabel.text = "Hits: " + String(correctTaps)
             print("Button Hit!!")
         }
         else {
@@ -64,9 +68,11 @@ class PlayScreenViewController: UIViewController {
     }
     
     
-    @IBAction func clickyButton(_ sender: UIButton) {
+    @IBAction func startButtonTapped(_ sender: UIButton) {
         
-        playTimer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(updateButtonLocation), userInfo: nil, repeats: true)
+        playTimer = Timer.scheduledTimer(timeInterval: timeRes, target: self, selector: #selector(updateButtonLocation), userInfo: nil, repeats: true)
+        startButton.isEnabled = true
+        startButton.isOpaque = true
     }
     
     func updateButtonLocation() {
@@ -75,26 +81,26 @@ class PlayScreenViewController: UIViewController {
         timeLabel.text = "TimeLeft: " + String(timeLeft)
         
         // update location of button
-        let tmpX = arc4random_uniform(UInt32(rightBound - buttonWidth))
-        let tmpY = arc4random_uniform(UInt32(lowerBound - buttonHeight))
-        clickyButton.frame = CGRect(x: Int(tmpX), y: Int(tmpY), width: buttonWidth, height: buttonHeight)
+        let tmpX = arc4random_uniform(UInt32(rightBound - blockWidth))
+        let tmpY = arc4random_uniform(UInt32(lowerBound - blockHeight))
+        movingBlock.frame = CGRect(x: Int(tmpX), y: Int(tmpY), width: blockWidth, height: blockHeight)
         
         // make button visible or invisible 
-        if timeLeft % 2 == 0 {
-            clickyButton.backgroundColor = self.view.backgroundColor
-            //clickyButton.isEnabled = false
+        if nIterations % 2 == 0 {
+            movingBlock.backgroundColor = self.view.backgroundColor
         }
         else {
-            //clickyButton.isEnabled = true
-            clickyButton.backgroundColor = UIColor.red
+            movingBlock.backgroundColor = UIColor.red
         }
         
-        timeLeft -= 1
+        timeLeft -= timeRes
+        nIterations += 1
         
-        if timeLeft == 0 {
+        if timeLeft == 0.0 {
             playTimer.invalidate()
             timeLeft = timeLimit
             correctTaps = 0
+            nIterations = 0
         }
     }
 
